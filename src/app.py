@@ -47,6 +47,7 @@ figScatter = px.scatter(df, **figScatter_inputs)
 
 #%%
 
+
 # Initialisation de l'application Dash
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
@@ -60,11 +61,12 @@ app.layout = html.Div([
     ]),
     dbc.Row([
         dbc.Col([
-            dcc.Graph(id="scatter-plot", figure=figScatter),  # Scatter plot
-        ], width=8),
-        dbc.Col([
             dcc.Graph(id="sunburst", figure=fig_sunburst),  # Sunburst plot
-        ], width=4),
+        ], style={'position': 'absolute', 'left': '600px', 'top': '400px', 'width': '100%'}),
+        dbc.Col([
+            dcc.Graph(id="scatter-plot", figure=figScatter),  # Scatter plot
+        ], style={'position': 'absolute', 'left': '0', 'top': '400px', 'width': '75%'}),
+        
     ]),
     dcc.Store(id='activefilters', data={}),
 ])
