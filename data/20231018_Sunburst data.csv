@@ -1,0 +1,30 @@
+impact,category,component,value
+Operational GWP,Heating,,0.02
+Operational GWP,Equipments,,0.02
+Operational GWP,Hot water,,0.015
+Operational GWP,Lighting,,0.015
+Operational GWP,Ventilation,,0.005
+Embodied GWP,Slabs,Structure,0.15
+Embodied GWP,Slabs,Finishing,0.115
+Embodied GWP,Slabs,Insulation,0.01
+Embodied GWP,Facade,Wall structure,0.055
+Embodied GWP,Facade,Insulation,0.045
+Embodied GWP,Facade,Facade cladding,0.035
+Embodied GWP,Facade,Glazing,0.025
+Embodied GWP,Facade,Shading,0.025
+Embodied GWP,Facade,Frame,0.01
+Embodied GWP,Installations,Heating,0.09
+Embodied GWP,Installations,Ventilation,0.03
+Embodied GWP,Installations,Electrical,0.02
+Embodied GWP,Installations,Sanitary,0.02
+Embodied GWP,Interior walls,Interior walls and finishing,0.09
+Embodied GWP,Interior walls,Core walls,0.04
+Embodied GWP,Interior walls,Pillars,0.01
+Embodied GWP,Underground envelope,Foundation,0.03
+Embodied GWP,Underground envelope,Underground roof,0.015
+Embodied GWP,Underground envelope,Peripheral walls,0.015
+Embodied GWP,Roof,Covering,0.025
+Embodied GWP,Roof,Structure,0.02
+Embodied GWP,Roof,Insulation,0.01
+Embodied GWP,Preparatory work,Shielding walls,0.03
+Embodied GWP,Preparatory work,Excavation,0.01
