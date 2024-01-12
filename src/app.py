@@ -15,7 +15,7 @@ pd.DataFrame.iteritems = pd.DataFrame.items
 
 # Sample data
 
-data = pd.read_csv("../data/database.csv.gzip", compression="gzip")
+data = pd.read_csv("../data/database.csv",encoding='ISO-8859-1')
 #file='../data/20240110_SFH database.csv'
 # data= pd.read_csv(file,encoding='ISO-8859-1')
 df=pd.DataFrame(data)
@@ -61,17 +61,14 @@ app.layout = html.Div([
     ]),
     dbc.Row([
         dbc.Col([
-            dcc.Graph(id="sunburst", figure=fig_sunburst),  # Sunburst plot
-        ], style={'position': 'absolute', 'left': '600px', 'top': '400px', 'width': '100%'}),
-        dbc.Col([
             dcc.Graph(id="scatter-plot", figure=figScatter),  # Scatter plot
-        ], style={'position': 'absolute', 'left': '0', 'top': '400px', 'width': '75%'}),
-        
+        ], width=7),  # Adjusted width
+        dbc.Col([
+            dcc.Graph(id="sunburst", figure=fig_sunburst),  # Sunburst plot
+        ], width=5),  # Adjusted width
     ]),
     dcc.Store(id='activefilters', data={}),
 ])
-
-
 
 #%%
 
