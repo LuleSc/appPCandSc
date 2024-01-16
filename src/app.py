@@ -179,11 +179,9 @@ def update_parallel_coordinates_plot_SC(selectedData):
                                   dimensions=dims,color_continuous_scale=px.colors.sequential.thermal)
 
 
-
 #%%
 
 # Lancement de l'application
 if __name__ == '__main__':
     app.run_server(debug=True)
-    # Exportez l'application en HTML
 
