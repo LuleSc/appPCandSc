@@ -10,6 +10,7 @@ import dash_bootstrap_components as dbc
 from dash import Dash, dcc, Input, Output, Patch,html
 import plotly.express as px
 import pandas as pd
+import plotly.graph_objects as go
 
 pd.DataFrame.iteritems = pd.DataFrame.items
 
@@ -32,11 +33,41 @@ fig_sunburst = px.sunburst(df1, path=['impact', 'category', 'component'], values
 
 # Parallel coordinate
 
-dims = ["Wall structure type", "Wall insulation type", "Glazing type", "Frame type","Shading type","WWR",  "DoL",  "WDR",  "OI",
-          "Facade EI",  "sDA","Glazing area"]
+dims = ['Facade orientation','Wall structure type','Facade cladding type','Wall insulation type',
+'Glazing type','Frame type','Shading type','WWR',
+ 'WDR','DoL','Slab structure type','Building U', 'Heating system',
+'PV %','Underground%','Climate','Context',
+'OI','Facade EI', 'sDA','Glazing area']
 
-fig = px.parallel_coordinates(df, color="Glazing area",
-                              dimensions=dims,color_continuous_scale=px.colors.sequential.thermal)
+
+dimswithname=list([
+            dict(label = 'Orientation', tickvals = [1,2,3,4], ticktext = ['S', 'N-S', 'N-S-W', 'N-S-W-E'], values = df['Facade orientation']),
+            dict(label = 'Wall_str', tickvals = [1,2,3,4], ticktext = ['Concrete', 'Brick', 'MassiveWood', 'WoodFramed'], values = df['Wall structure type']),
+            dict(label = 'Fac_clad', tickvals = [1,2,3,4], ticktext = ['Min_plast', 'Cem_plast', 'Wood', 'Fibrocement'], values = df['Facade cladding type']),
+            dict(label = 'Wall_ins', tickvals = [1,2,3,4], ticktext = ['Straw', 'Cellulose', 'Glass wool', 'EPS'], values = df['Wall insulation type']),
+            dict(label = 'Glazing', tickvals = [1,2,3,4], ticktext = ['Double, 24 mm', 'Double, 18 mm', 'Triple 40 mm', 'Triple 36 mm'], values = df['Glazing type']),
+            dict(label = 'Frame', tickvals = [1,2,3,4], ticktext = ['Wood', 'Wood-Alu', 'Alu', 'PVC'], values = df['Frame type']),
+            dict(label = 'Shading', tickvals = [1,2,3,4], ticktext = ['No shading', 'Venetian', 'Projection', 'Roller'], values = df['Shading type']),
+            dict(label = 'WWR', tickvals = [1,2,3,4], ticktext = ['30%', '40%', '50%', '60%'], values = df['WWR']),
+            dict(label = 'WDR', tickvals = [1,2,3,4], ticktext = ['0.8', '1', '1.2', '1.4'], values = df['WDR']),
+            dict(label = 'Loggia D', tickvals = [1,2,3,4], ticktext = ['-2.4', '-1.2', '0', '1.2'], values = df['DoL']),
+            dict(label = 'Slab_str', tickvals = [1,2,3,4], ticktext = ['Wood', 'Wood-concrete', 'Concrete', 'Metal-deck'], values = df['Slab structure type']),
+            dict(label = 'U-value', tickvals = [1,2,3,4], ticktext = ['0.1', '0.15', '0.2', '0.25'], values = df['Building U']),
+            dict(label = 'Heating', tickvals = [1,2,3,4], ticktext = ['Heat pump', 'District heat.', 'Biomass', 'Oil'], values = df['Heating system']),
+            dict(label = 'PV%', tickvals = [1,2,3,4], ticktext = ['0%', '50%', '100%', '100%+S fac.'], values = df['PV %']),
+            dict(label = 'Underground%', tickvals = [1,2,3,4], ticktext = ['0%', '33%', '66%', '100%'], values = df['Underground%']),
+            dict(label = 'Climate', tickvals = [1,2,3,4], ticktext = ['Fribourg', 'Zurich', 'Zermatt', 'Lugano'], values = df['Climate']),
+            dict(label = 'Context', tickvals = [1,2,3,4], ticktext = ['On', 'Off','-','-'], values = df['Context']),
+            dict(label = 'OI',  values = df['OI']),
+            dict(label = 'Facade EI',  values = df['Facade EI']),
+            dict(label = 'sDA',  values = df['sDA']),
+            dict(label = 'Glazing area',range = [min(df['Glazing area']),max(df['Glazing area'])],  values = df['Glazing area']),
+            ])
+
+
+fig=go.Figure(go.Parcoords(
+    line=dict(color=df['Glazing area'], colorscale='Thermal', showscale=False),
+    dimensions=dimswithname))
 
 
 # Scatter plot
@@ -168,16 +199,48 @@ def updateFilters(data):
 )
 def update_parallel_coordinates_plot_SC(selectedData):
     if selectedData is None:
-        return px.parallel_coordinates(df, color="Glazing area",
-                                      dimensions=dims,color_continuous_scale=px.colors.sequential.thermal)
+        fig.update_traces(
+        line=dict(color=df['Glazing area'], colorscale='Thermal', showscale=False),
+        dimensions=dimswithname)
+        
+        return fig
     
     selected_points_x = [point['x'] for point in selectedData['points']]
     selected_points_y = [point['y'] for point in selectedData['points']]
     
     # Utilisez les coordonnées x et y pour filtrer le DataFrame ou effectuer d'autres opérations
     filtered_df = df[df['Facade EI'].isin(selected_points_x) & df['sDA'].isin(selected_points_y)]
-    return px.parallel_coordinates(filtered_df, color="Glazing area",
-                                  dimensions=dims,color_continuous_scale=px.colors.sequential.thermal)
+    dimswithname1=list([
+                dict(label = 'Orientation', tickvals = [1,2,3,4], ticktext = ['S', 'N-S', 'N-S-W', 'N-S-W-E'], values = filtered_df['Facade orientation']),
+                dict(label = 'Wall_str', tickvals = [1,2,3,4], ticktext = ['Concrete', 'Brick', 'MassiveWood', 'WoodFramed'], values = filtered_df['Wall structure type']),
+                dict(label = 'Fac_clad', tickvals = [1,2,3,4], ticktext = ['Min_plast', 'Cem_plast', 'Wood', 'Fibrocement'], values = filtered_df['Facade cladding type']),
+                dict(label = 'Wall_ins', tickvals = [1,2,3,4], ticktext = ['Straw', 'Cellulose', 'Glass wool', 'EPS'], values = filtered_df['Wall insulation type']),
+                dict(label = 'Glazing', tickvals = [1,2,3,4], ticktext = ['Double, 24 mm', 'Double, 18 mm', 'Triple 40 mm', 'Triple 36 mm'], values = filtered_df['Glazing type']),
+                dict(label = 'Frame', tickvals = [1,2,3,4], ticktext = ['Wood', 'Wood-Alu', 'Alu', 'PVC'], values = filtered_df['Frame type']),
+                dict(label = 'Shading', tickvals = [1,2,3,4], ticktext = ['No shading', 'Venetian', 'Projection', 'Roller'], values = filtered_df['Shading type']),
+                dict(label = 'WWR', tickvals = [1,2,3,4], ticktext = ['30%', '40%', '50%', '60%'], values = filtered_df['WWR']),
+                dict(label = 'WDR', tickvals = [1,2,3,4], ticktext = ['0.8', '1', '1.2', '1.4'], values = filtered_df['WDR']),
+                dict(label = 'Loggia D', tickvals = [1,2,3,4], ticktext = ['-2.4', '-1.2', '0', '1.2'], values = filtered_df['DoL']),
+                dict(label = 'Slab_str', tickvals = [1,2,3,4], ticktext = ['Wood', 'Wood-concrete', 'Concrete', 'Metal-deck'], values = filtered_df['Slab structure type']),
+                dict(label = 'U-value', tickvals = [1,2,3,4], ticktext = ['0.1', '0.15', '0.2', '0.25'], values = filtered_df['Building U']),
+                dict(label = 'Heating', tickvals = [1,2,3,4], ticktext = ['Heat pump', 'District heat.', 'Biomass', 'Oil'], values = filtered_df['Heating system']),
+                dict(label = 'PV%', tickvals = [1,2,3,4], ticktext = ['0%', '50%', '100%', '100%+S fac.'], values = filtered_df['PV %']),
+                dict(label = 'Underground%', tickvals = [1,2,3,4], ticktext = ['0%', '33%', '66%', '100%'], values = filtered_df['Underground%']),
+                dict(label = 'Climate', tickvals = [1,2,3,4], ticktext = ['Fribourg', 'Zurich', 'Zermatt', 'Lugano'], values = filtered_df['Climate']),
+                dict(label = 'Context', tickvals = [1,2,3,4], ticktext = ['On', 'Off','-','-'], values = filtered_df['Context']),
+                dict(label = 'OI',  values = filtered_df['OI']),
+                dict(label = 'Facade EI',  values = filtered_df['Facade EI']),
+                dict(label = 'sDA',  values = filtered_df['sDA']),
+                dict(label = 'Glazing area',range = [min(df['Glazing area']),max(df['Glazing area'])],  values = filtered_df['Glazing area']),
+                ])
+    
+    
+    fig.update_traces(
+    line=dict(color=filtered_df['Glazing area'], colorscale='Thermal', showscale=False),
+    dimensions=dimswithname1
+)
+    
+    return fig
 
 
 #%%
