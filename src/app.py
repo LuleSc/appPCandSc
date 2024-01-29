@@ -29,7 +29,9 @@ data1= pd.read_csv(file,encoding='ISO-8859-1')
 df1= pd.DataFrame(data1)
 
 #sunburst
+
 fig_sunburst = px.sunburst(df1, path=['impact', 'category', 'component'], values='value')
+fig_sunburst.update_traces(hovertemplate = ('%{label}<br>Value = %{value:.2}<br>%{percentRoot:.0%}'))
 
 # Parallel coordinate
 
@@ -152,7 +154,10 @@ def update_sunburst_plot(scatter_selectedData, parallel_selectedData):
                          dff['Roof covering'].mean(),dff['Roof structure'].mean(),dff['Roof insulation'].mean(),dff['Shielding walls'].mean(),dff['Excavation'].mean()
                            ]
             
-    return px.sunburst(df1, path=['impact', 'category', 'component'], values='value')
+    fig_sunburst=px.sunburst(df1, path=['impact', 'category', 'component'], values='value')
+    fig_sunburst.update_traces(hovertemplate = ('%{label}<br>Value = %{value:.2}<br>%{percentRoot:.0%}'))
+
+    return fig_sunburst
 
 
 
