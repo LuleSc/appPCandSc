@@ -36,8 +36,8 @@ fig_sunburst = px.sunburst(df1, path=['impact', 'category', 'component'], values
 dims = ['Facade orientation','Wall structure type','Facade cladding type','Wall insulation type',
 'Glazing type','Frame type','Shading type','WWR',
  'WDR','DoL','Slab structure type','Building U', 'Heating system',
-'PV %','Underground%','Climate','Context',
-'OI','Facade EI', 'sDA','Glazing area']
+'PV %','Underground%','Climate',
+'OI','EI','Facade EI', 'sDA','Glazing area']
 
 
 dimswithname=list([
@@ -56,8 +56,9 @@ dimswithname=list([
             dict(label = 'Heating', tickvals = [1,2,3,4], ticktext = ['Heat pump', 'District heat.', 'Biomass', 'Oil'], values = df['Heating system']),
             dict(label = 'PV%', tickvals = [1,2,3,4], ticktext = ['0%', '50%', '100%', '100%+S fac.'], values = df['PV %']),
             dict(label = 'Underground%', tickvals = [1,2,3,4], ticktext = ['0%', '33%', '66%', '100%'], values = df['Underground%']),
-            dict(label = 'Climate', tickvals = [1,2,3,4], ticktext = ['Fribourg', 'Zurich', 'Zermatt', 'Lugano'], values = df['Climate']),
+            dict(label = 'Climate', tickvals = [1,2,3,4], ticktext = ['Lugano', 'Fribourg', 'Zermatt', 'Zurich'], values = df['Climate']),
             dict(label = 'OI',  values = df['OI']),
+            dict(label = 'EI',  values = df['EI']),
             dict(label = 'Facade EI',  values = df['Facade EI']),
             dict(label = 'sDA',  values = df['sDA']),
             dict(label = 'Glazing area',range = [min(df['Glazing area']),max(df['Glazing area'])],  values = df['Glazing area']),
@@ -139,8 +140,14 @@ def update_sunburst_plot(scatter_selectedData, parallel_selectedData):
                     dff = dff[dff[col].between(rng[0], rng[1])]
     else:
         dff=filtered_df
-        
-    df1['value']=[dff['Heating'].mean(),dff['Equipments'].mean(),dff['Hot water'].mean(),dff['Lighting'].mean(),dff['Ventilation'].mean(),dff['Slab structure'].mean(),dff['Slab finishing'].mean(),dff['Slab insulation'].mean(),dff['Wall structure'].mean(),dff['Wall insulation'].mean(),dff['Facade cladding'].mean(),dff['Glazing'].mean(),
+    
+    if dff['OI'].mean()<=0:
+        df1['value']=[0,0,0,0,0,dff['Slab structure'].mean(),dff['Slab finishing'].mean(),dff['Slab insulation'].mean(),dff['Wall structure'].mean(),dff['Wall insulation'].mean(),dff['Facade cladding'].mean(),dff['Glazing'].mean(),
+                              dff['Shading'].mean(),dff['Frame'].mean(),dff['Heating installations'].mean(),dff['Ventilation installations'].mean(),dff['Electrical installations'].mean(),dff['Sanitary installations'].mean(),dff['Interior walls and finishing'].mean(),dff['Core walls'].mean(),dff['Pillars'].mean(),dff['Foundation'].mean(),dff['Underground roof'].mean(),dff['Peripheral walls'].mean(),
+                             dff['Roof covering'].mean(),dff['Roof structure'].mean(),dff['Roof insulation'].mean(),dff['Shielding walls'].mean(),dff['Excavation'].mean()
+                               ]
+    else:
+        df1['value']=[dff['Heating'].mean(),dff['Equipments'].mean(),dff['Hot water'].mean(),dff['Lighting'].mean(),dff['Ventilation'].mean(),dff['Slab structure'].mean(),dff['Slab finishing'].mean(),dff['Slab insulation'].mean(),dff['Wall structure'].mean(),dff['Wall insulation'].mean(),dff['Facade cladding'].mean(),dff['Glazing'].mean(),
                           dff['Shading'].mean(),dff['Frame'].mean(),dff['Heating installations'].mean(),dff['Ventilation installations'].mean(),dff['Electrical installations'].mean(),dff['Sanitary installations'].mean(),dff['Interior walls and finishing'].mean(),dff['Core walls'].mean(),dff['Pillars'].mean(),dff['Foundation'].mean(),dff['Underground roof'].mean(),dff['Peripheral walls'].mean(),
                          dff['Roof covering'].mean(),dff['Roof structure'].mean(),dff['Roof insulation'].mean(),dff['Shielding walls'].mean(),dff['Excavation'].mean()
                            ]
@@ -225,8 +232,9 @@ def update_parallel_coordinates_plot_SC(selectedData):
                 dict(label = 'Heating', tickvals = [1,2,3,4], ticktext = ['Heat pump', 'District heat.', 'Biomass', 'Oil'], values = filtered_df['Heating system']),
                 dict(label = 'PV%', tickvals = [1,2,3,4], ticktext = ['0%', '50%', '100%', '100%+S fac.'], values = filtered_df['PV %']),
                 dict(label = 'Underground%', tickvals = [1,2,3,4], ticktext = ['0%', '33%', '66%', '100%'], values = filtered_df['Underground%']),
-                dict(label = 'Climate', tickvals = [1,2,3,4], ticktext = ['Fribourg', 'Zurich', 'Zermatt', 'Lugano'], values = filtered_df['Climate']),
+                dict(label = 'Climate', tickvals = [1,2,3,4], ticktext = ['Lugano', 'Fribourg', 'Zermatt', 'Zurich'], values = filtered_df['Climate']),
                 dict(label = 'OI',  values = filtered_df['OI']),
+                dict(label = 'EI',  values = filtered_df['EI']),
                 dict(label = 'Facade EI',  values = filtered_df['Facade EI']),
                 dict(label = 'sDA',  values = filtered_df['sDA']),
                 dict(label = 'Glazing area',range = [min(df['Glazing area']),max(df['Glazing area'])],  values = filtered_df['Glazing area']),
