@@ -69,7 +69,9 @@ dimswithname=list([
 
 fig=go.Figure(go.Parcoords(
     line=dict(color=df['Glazing area'], colorscale='Thermal', showscale=False),
-    dimensions=dimswithname))
+    dimensions=dimswithname,
+    unselected = dict(line = dict(color = 'white', opacity = .0))
+    ))
 
 
 # Scatter plot
@@ -238,17 +240,18 @@ def update_parallel_coordinates_plot_SC(selectedData):
                 dict(label = 'PV%',range =[1,4], tickvals = [1,2,3,4], ticktext = ['0%', '50%', '100%', '100%+S fac.'], values = filtered_df['PV %']),
                 dict(label = 'Underground%',range =[1,4], tickvals = [1,2,3,4], ticktext = ['0%', '33%', '66%', '100%'], values = filtered_df['Underground%']),
                 dict(label = 'Climate',range =[1,4], tickvals = [1,2,3,4], ticktext = ['Lugano', 'Fribourg', 'Zermatt', 'Zurich'], values = filtered_df['Climate']),
-                dict(label = 'OI',  values = filtered_df['OI']),
-                dict(label = 'EI',  values = filtered_df['EI']),
-                dict(label = 'Facade EI',  values = filtered_df['Facade EI']),
-                dict(label = 'sDA',  values = filtered_df['sDA']),
+                dict(label = 'OI',range = [min(df['OI']),max(df['OI'])],  values = filtered_df['OI']),
+                dict(label = 'EI',range = [min(df['EI']),max(df['EI'])],  values = filtered_df['EI']),
+                dict(label = 'Facade EI',range = [min(df['Facade EI']),max(df['Facade EI'])],  values = filtered_df['Facade EI']),
+                dict(label = 'sDA',range = [min(df['sDA']),max(df['sDA'])],  values = filtered_df['sDA']),
                 dict(label = 'Glazing area',range = [min(df['Glazing area']),max(df['Glazing area'])],  values = filtered_df['Glazing area']),
                 ])
     
     
     fig.update_traces(
     line=dict(color=filtered_df['Glazing area'], colorscale='Thermal', showscale=False),
-    dimensions=dimswithname1
+    dimensions=dimswithname1,
+    unselected = dict(line = dict(color = 'white', opacity = .0))
 )
     
     return fig
