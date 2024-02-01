@@ -17,7 +17,7 @@ pd.DataFrame.iteritems = pd.DataFrame.items
 # Sample data
 
 #data = pd.read_csv("../data/database.csv",encoding='ISO-8859-1')
-data = pd.read_csv("../data/database1.csv.gzip", compression="gzip")
+data = pd.read_csv("../data/database.csv.gzip", compression="gzip")
 #file='../data/20240110_SFH database.csv'
 # data= pd.read_csv(file,encoding='ISO-8859-1')
 df=pd.DataFrame(data)
